@@ -7,15 +7,6 @@
 # P.S. - requirements.txt, git init, tests.
 import psycopg2
 from pymongo import MongoClient
-import logging
-
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-logging.basicConfig(filename="logname",
-                            filemode='a',
-                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                            datefmt='%H:%M:%S',
-                            level=logging.INFO)
 
 prod_client = MongoClient('localhost', 27017)
 prod_db = prod_client.prod
@@ -30,12 +21,15 @@ cur.execute("CREATE TABLE users_orders (id serial PRIMARY KEY, user_id varchar)"
 wh_client.commit()
 
 
-def sync_db():
+def sync_db() -> str:
+    """
+    Syncs up users and orders from production db to warehouse db
+    :return: DB state, can be either synced or how many new items were added
+    """
     prod_items = order_col
     wh_items = cur.execute("SELECT ids from user_orders")
 
     if prod_items == wh_items:
-        logger.log()
         return "DBs are synced"
     else:
         new_items = set(prod_items) ^ set(wh_items)
