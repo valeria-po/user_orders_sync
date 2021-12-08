@@ -9,9 +9,10 @@ def sync_db():
     """
 
     db_prod_items = []
-    all_prod_items = get_users() + get_orders()
+    prod_items = get_users() + get_orders()
+    wh_items = get_wh_users_orders()
 
-    for item in all_prod_items:
+    for item in prod_items:
         users_orders_unified = {
             "id": item.get("id", ),
             "order_id": item.get("order_id", ),
@@ -21,14 +22,11 @@ def sync_db():
         }
         db_prod_items.append(users_orders_unified)
 
-    write_to_db(db_prod_items)
-    wh_items = get_wh_users_orders()
+    wh_user_ids = [user["user_id"] for user in wh_items if user["user_id"] is not None]
+    prod_user_ids = [user["user_id"] for user in db_prod_items if user["user_id"] is not None]
 
-    wh_user_ids = [usr["user_id"] for usr in wh_items]
-    prod_user_ids = [usr["user_id"] for usr in db_prod_items]
-
-    wh_order_ids = [order["order_id"] for order in wh_items]
-    prod_order_ids = [order["order_id"] for order in db_prod_items]
+    wh_order_ids = [order["order_id"] for order in wh_items if order["order_id"] is not None]
+    prod_order_ids = [order["order_id"] for order in db_prod_items if order["order_id"] is not None]
 
     if len(db_prod_items) == len(wh_items):
         print("DBs are synced")
@@ -44,6 +42,3 @@ def sync_db():
                 added_items.append(item)
         write_to_db(added_items)
         print(f"Added {len(added_items)} new items")
-
-
-sync_db()

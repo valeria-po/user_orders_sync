@@ -1,3 +1,5 @@
+from typing import List
+
 import psycopg2
 
 wh_client = psycopg2.connect(database="user_orders", user="postgres", password="root", port="5433")
@@ -7,7 +9,7 @@ cur.execute("CREATE TABLE IF NOT EXISTS user_order_version_three "
 wh_client.commit()
 
 
-def get_wh_users_orders():
+def get_wh_users_orders() -> List:
     """
     View existing items in the warehouse database
     :return:
@@ -24,19 +26,19 @@ def get_wh_users_orders():
     all_user_orders = cur.fetchall()
     wh_client.commit()
     for item in all_user_orders:
-        dicted = {
+        user_orders = {
             "id": item[0],
             "user_id": item[1],
             "order_id": item[2],
             "last_name": item[3],
             "first_name": item[4]
         }
-        wh_users_orders.append(dicted)
+        wh_users_orders.append(user_orders)
 
     return wh_users_orders
 
 
-def write_to_db(prod_user_orders):
+def write_to_db(prod_user_orders: List):
     """
     Write to database the initial and consequently updated items
     :param prod_user_orders: The items with which the db is updated

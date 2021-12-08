@@ -11,8 +11,8 @@ scheduler.start()
 
 
 @app.route('/')
-def hello_world():
-    return 'Hello World!'
+def wh_db():
+    return "Warehouse db containing Users and Orders"
 
 
 if __name__ == '__main__':
