@@ -15,10 +15,29 @@ def sync_db():
     for item in prod_items:
         users_orders_unified = {
             "id": item.get("id", ),
-            "order_id": item.get("order_id", ),
             "user_id": item.get("user_id", ),
-            "last_name": item.get("last_name", ),
             "first_name": item.get("first_name", ),
+            "last_name": item.get("last_name", ),
+            "merchant_id": item.get("merchant_id", ),
+            "phone_number": item.get("phone_number", ),
+            "users_created_at": item.get("users_created_at", ),
+            "users_updated_at": item.get("users_updated_at", ),
+            "id_order": item.get("id_order", ),
+            "orders_created_at": item.get("orders_created_at", ),
+            "date_tz": item.get("date_tz", ),
+            "item_count": item.get("item_count", ),
+            "order_id": item.get("order_id", ),
+            "receive_method": item.get("receive_method", ),
+            "status": item.get("status", ),
+            "store_id": item.get("store_id", ),
+            "subtotal": item.get("subtotal", ),
+            "tax_percentage": item.get("tax_percentage", ),
+            "total": item.get("total", ),
+            "total_discount": item.get("total_discount", ),
+            "total_gratuity": item.get("total_gratuity", ),
+            "total_tax": item.get("total_tax", ),
+            "orders_updated_at": item.get("orders_updated_at", ),
+            "fulfillment_date_tz": item.get("fulfillment_date_tz", ),
         }
         db_prod_items.append(users_orders_unified)
 
@@ -42,3 +61,6 @@ def sync_db():
                 added_items.append(item)
         write_to_db(added_items)
         print(f"Added {len(added_items)} new items")
+
+
+sync_db()
